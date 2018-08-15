@@ -6,6 +6,7 @@ package com.microsoft;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.SparseArray;
 
 import com.facebook.react.bridge.ActivityEventListener;
@@ -74,6 +75,20 @@ public class ActivityResultModule extends ReactContextBaseJavaModule implements 
       intent.putExtras(Arguments.toBundle(data));
       activity.startActivityForResult(intent, requestCode);
       mPromises.put(requestCode, promise);
+  }
+
+  @ReactMethod
+  public void startActivityForResultWithURL(
+    int requestCode,
+    String url,
+    Promise promise
+  ) {
+    Activity activity = getReactApplicationContext().getCurrentActivity();
+    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+
+    activity.startActivityForResult(intent, requestCode);
+
+    mPromises.put(requestCode, promise);
   }
 
   @ReactMethod
